@@ -10,6 +10,9 @@
 
 from distutils.version import StrictVersion
 
+import time 
+import random as rand
+
 if __name__ == '__main__':
     import ctypes
     import sys
@@ -76,7 +79,11 @@ class ook_transmit(gr.top_block, Qt.QWidget):
         ##################################################
         self.symbol_rate = symbol_rate = int (2392)
         self.samp_rate = samp_rate = 5e6
-        self.packet = packet = forward_left(50)
+
+
+        #self.packet = packet = forward_left(50)  + forward_right(200) 
+        self.packet = packet = forward_both(50)
+
         self.carrier_freq = carrier_freq = 48.86e6
         self.bits_per_pack = bits_per_pack = 2
 
@@ -136,11 +143,11 @@ class ook_transmit(gr.top_block, Qt.QWidget):
         self.osmosdr_sink_0.set_freq_corr(0, 0)
         self.osmosdr_sink_0.set_gain(16, 0)
         self.osmosdr_sink_0.set_if_gain(47, 0)
-        self.osmosdr_sink_0.set_bb_gain(0, 0)
+        self.osmosdr_sink_0.set_bb_gain(14, 0)
         self.osmosdr_sink_0.set_antenna('', 0)
         self.osmosdr_sink_0.set_bandwidth(2000, 0)
         self.digital_map_bb_0 = digital.map_bb([0x0, 0x1])
-        self.blocks_vector_source_x_0 = blocks.vector_source_b([ int (x) for x in packet ], True, 1, [])
+        self.blocks_vector_source_x_0 = blocks.vector_source_b([ int (x) for x in packet ], False, 1, [])
         self.blocks_uchar_to_float_0 = blocks.uchar_to_float()
         self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(40)
         self.blocks_moving_average_xx_0 = blocks.moving_average_ff(int(samp_rate/symbol_rate), 1, 4000, 1)
@@ -247,6 +254,9 @@ def lforward_rback(amount):
 def lback_rforward(amount):
     return amount * make_packet(56)
 
+func_lst = [
+    forward_right, forward_left, forward_both, back_right, back_left, back_both, lforward_rback, lback_rforward
+]
 
 def main(top_block_cls=ook_transmit, options=None):
 
@@ -261,15 +271,35 @@ def main(top_block_cls=ook_transmit, options=None):
 
     tb.show()
 
+    print(vars(tb))
     def sig_handler(sig=None, frame=None):
         Qt.QApplication.quit()
 
     signal.signal(signal.SIGINT, sig_handler)
     signal.signal(signal.SIGTERM, sig_handler)
 
-    timer = Qt.QTimer()
-    timer.start(500)
-    timer.timeout.connect(lambda: None)
+
+    # Randomly change the direction! :) 
+    while(True):
+
+        # Call random function
+        func_to_call_index = rand.randint(0,len(func_lst)-1)
+        time.sleep(2)
+        tb.lock()
+        tb.set_packet(func_lst[func_to_call_index](50) )
+        tb.unlock()
+
+    '''
+    # Choose your own movement :)
+    while(True):
+        val = input("Enter your value: ")
+        func_lst[int(val)](50)
+
+        tb.lock()
+        tb.set_packet(func_lst[int(val)](50) )
+        tb.unlock()
+
+    '''
 
     def quitting():
         tb.stop()

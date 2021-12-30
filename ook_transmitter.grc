@@ -48,7 +48,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: 48.86e6
+    value: 49e6
   states:
     bus_sink: false
     bus_source: false
@@ -125,7 +125,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [719, 114]
+    coordinate: [716, 138]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0
@@ -134,7 +134,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    const: '2'
+    const: '100'
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
@@ -285,7 +285,7 @@ blocks:
     bb_gain7: '20'
     bb_gain8: '20'
     bb_gain9: '20'
-    bw0: '2000'
+    bw0: 1e6
     bw1: '0'
     bw10: '0'
     bw11: '0'
@@ -494,7 +494,7 @@ blocks:
     autoscale: 'False'
     average: '1.0'
     axislabels: 'True'
-    bw: 10e6
+    bw: 1e6
     color1: '"blue"'
     color10: '"dark blue"'
     color2: '"red"'

@@ -77,7 +77,7 @@ class ook_transmit(gr.top_block, Qt.QWidget):
         self.symbol_rate = symbol_rate = int (2392)
         self.samp_rate = samp_rate = 5e6
         self.packet = packet = "111011101110111010101010101010101010101010101010111011101110111010101010101010101010101010101010111011101110111010101010101010101010101010101010111011101110111010101010101010101010101010101010111011101110111010101010101010101010101010101010111011101110111010101010101010101010101010101010111011101110111010101010101010101010101010101010111011101110111010101010101010101010101010101010111011101110111010101010101010101010101010101010111011101110111010101010101010101010101010101010111011101110111010101010101010101010101010101010"
-        self.carrier_freq = carrier_freq = 48.86e6
+        self.carrier_freq = carrier_freq = 49e6
         self.bits_per_pack = bits_per_pack = 2
 
         ##################################################
@@ -92,7 +92,7 @@ class ook_transmit(gr.top_block, Qt.QWidget):
             1024, #size
             firdes.WIN_BLACKMAN_hARRIS, #wintype
             0, #fc
-            10e6, #bw
+            1e6, #bw
             "", #name
             1
         )
@@ -138,11 +138,11 @@ class ook_transmit(gr.top_block, Qt.QWidget):
         self.osmosdr_sink_0.set_if_gain(47, 0)
         self.osmosdr_sink_0.set_bb_gain(0, 0)
         self.osmosdr_sink_0.set_antenna('', 0)
-        self.osmosdr_sink_0.set_bandwidth(2000, 0)
+        self.osmosdr_sink_0.set_bandwidth(1e6, 0)
         self.digital_map_bb_0 = digital.map_bb([0x0, 0x1])
         self.blocks_vector_source_x_0 = blocks.vector_source_b([ int (x) for x in packet ], True, 1, [])
         self.blocks_uchar_to_float_0 = blocks.uchar_to_float()
-        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(2)
+        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(100)
         self.blocks_moving_average_xx_0 = blocks.moving_average_ff(int(samp_rate/symbol_rate), 1, 4000, 1)
         self.blocks_float_to_complex_0 = blocks.float_to_complex(1)
 
