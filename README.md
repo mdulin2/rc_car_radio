@@ -40,7 +40,7 @@ possible codes that can be sent then.
     - Removing any of the 1110s in the header causes the code not to work.
     - Changing the header to '1100', '0001' and '1000' work fine as well. But, '1111', '1011' and '1010' does not. Appears to need something that has a pulse that is not always on and not a consistent set of '10'
 
-The encoding of each of the movements
+The encoding of each of the movements:
 - Forward Left:
     - Has a sprinkle of longer pulses
     - 128 pulses between longer signals
